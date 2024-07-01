@@ -11,4 +11,4 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL CancelBooking(3);
+CALL CancelBooking(1);
