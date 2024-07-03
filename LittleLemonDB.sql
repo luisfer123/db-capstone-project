@@ -26,14 +26,14 @@ CREATE TABLE `bookings` (
   `booking_id` int NOT NULL AUTO_INCREMENT,
   `booking_date` date NOT NULL,
   `table_number` int DEFAULT NULL,
-  `Customer_customer_id` int DEFAULT NULL,
-  `Staff_staff_id` int DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
+  `staff_id` int DEFAULT NULL,
   PRIMARY KEY (`booking_id`),
-  KEY `fk_Bookings_Customer1_idx` (`Customer_customer_id`),
-  KEY `fk_Bookings_Staff1_idx` (`Staff_staff_id`),
-  CONSTRAINT `fk_Bookings_Customer1` FOREIGN KEY (`Customer_customer_id`) REFERENCES `customer` (`customer_id`),
-  CONSTRAINT `fk_Bookings_Staff1` FOREIGN KEY (`Staff_staff_id`) REFERENCES `staff` (`staff_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+  KEY `fk_Bookings_Customer1_idx` (`customer_id`),
+  KEY `fk_Bookings_Staff1_idx` (`staff_id`),
+  CONSTRAINT `fk_Bookings_Customer1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `fk_Bookings_Staff1` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
+INSERT INTO `bookings` VALUES (2,'2022-11-15',3,NULL,NULL),(4,'2022-10-10',5,2,NULL),(5,'2022-10-10',5,2,NULL),(6,'2022-10-10',3,1,NULL),(7,'2022-10-10',5,1,NULL),(8,'2022-11-12',3,3,NULL),(9,'2022-10-11',2,3,NULL),(10,'2022-10-13',2,1,NULL);
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,10 +196,10 @@ CREATE TABLE `orders` (
   `total_cost` double DEFAULT NULL,
   `order_date` datetime NOT NULL,
   `quantity` int NOT NULL,
-  `Customer_customer_id` int NOT NULL,
+  `customer_id` int NOT NULL,
   PRIMARY KEY (`order_id`),
-  KEY `fk_Orders_Customer1_idx` (`Customer_customer_id`),
-  CONSTRAINT `fk_Orders_Customer1` FOREIGN KEY (`Customer_customer_id`) REFERENCES `customer` (`customer_id`)
+  KEY `fk_Orders_Customer1_idx` (`customer_id`),
+  CONSTRAINT `fk_Orders_Customer1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -211,6 +212,20 @@ LOCK TABLES `orders` WRITE;
 INSERT INTO `orders` VALUES (1,255,'2018-10-20 00:00:00',3,1),(2,124,'2018-10-21 00:00:00',9,2),(3,147,'2018-10-23 00:00:00',2,1);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `ordersview`
+--
+
+DROP TABLE IF EXISTS `ordersview`;
+/*!50001 DROP VIEW IF EXISTS `ordersview`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `ordersview` AS SELECT 
+ 1 AS `order_id`,
+ 1 AS `quantity`,
+ 1 AS `total_cost`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `staff`
@@ -236,6 +251,24 @@ LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `ordersview`
+--
+
+/*!50001 DROP VIEW IF EXISTS `ordersview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`courserauser`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `ordersview` AS select `orders`.`order_id` AS `order_id`,`orders`.`quantity` AS `quantity`,`orders`.`total_cost` AS `total_cost` from `orders` where (`orders`.`quantity` > 2) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -246,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-30 15:49:40
+-- Dump completed on 2024-07-02 21:33:24
